@@ -9,7 +9,7 @@ class ComplementaryFilter:
         for _ in range(len(sequence_of_data)):
             self.refined_sequence.append(0.0)
 
-        self.alpha = 0
+        self.alpha = 0.1
         self.previous_data = 0
         self.current_data = 0
         self.current_raw_data = 0
@@ -39,6 +39,4 @@ class ComplementaryFilter:
 
             self.refined_sequence[i] = (1 - self.alpha) * self.previous_data + (1 - self.alpha) * (self.current_raw_data - self.previous_raw_data)
             self.previous_raw_data = self.current_raw_data
-
-
 

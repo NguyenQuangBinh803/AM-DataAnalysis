@@ -1,6 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
-import numpy as np
+from Complementary_Filter import ComplementaryFilter
+
 if __name__ == "__main__":
 
     acceleration_x = []
@@ -25,13 +26,17 @@ if __name__ == "__main__":
                 gyro_y.append(float(row[7]))
                 gyro_z.append(float(row[8]))
 
-
     time = []
     count = 0
     print(len(acceleration_x))
     for _ in range(len(acceleration_x)):
         time.append(count)
         count += 1
+
+    filter = ComplementaryFilter(acceleration_x)
+    filter.set_alpha(0.99)
+    filter.low_pass_filter_data()
+
     data = []
     gyro_data = []
 
@@ -40,12 +45,12 @@ if __name__ == "__main__":
         gyro_data.append([gyro_x[i],gyro_y[i], gyro_z[i]])
 
     plt.figure(1)
-    plt.plot(time, data, 'b-', linewidth=1)
+    plt.plot(time, filter.refined_sequence, 'b-', linewidth=1)
     plt.xlabel('Time (millis)')
     plt.ylabel('Acceleration (m/ss)')
 
     plt.figure(2)
-    plt.plot(time, gyro_data, 'b-', linewidth=1)
+    plt.plot(time, acceleration_x, 'b-', linewidth=1)
     plt.xlabel('Time (millis)')
     plt.ylabel('Gyro (rad/ss)')
     plt.show()
